@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.purdm.app.MainActivity">
+
+    <item
+        android:id="@+id/action_refresh"
+        android:orderInCategory="98"
+        android:title="Refresh"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_recent_transactions"
+        android:orderInCategory="99"
+        android:title="Recent Transactions"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+</menu>
