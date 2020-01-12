@@ -5,6 +5,7 @@ public class Api {
     private String request="get";
     private String key = "";
     protected Settings settings;
+    private String baseUrl = "";
 
     public Api(){
 
@@ -19,7 +20,7 @@ public class Api {
     }
 
     public String getBaseUrl(){
-        String url = this.getSettings().getString("domain","http://demo.purdm.com");
+        String url = this.getSettings().getString("domain","");
         return url;
     }
 
@@ -39,6 +40,14 @@ public class Api {
 
     public String getAction(String val){
         return this.getFinalUrl() + val + this.getKey();
+    }
+
+    public String getRequest() {
+        return request;
+    }
+
+    public void setRequest(String request) {
+        this.request = request;
     }
 
     private String getKey(){

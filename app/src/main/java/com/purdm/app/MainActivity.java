@@ -1,6 +1,7 @@
 package com.purdm.app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -72,13 +73,17 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
+        if (id== R.id.action_logout){
+            settings.logoutUser();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
 
     public void loadPageData(){
         Ion.with(MainActivity.this)
-                .load(api.getAction("ie"))
+                .load(api.getAction(Constants.INCOME_EXPENSES_ACTION_TAG))
                 .setLogging("MyLogs", Log.DEBUG)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
@@ -89,11 +94,8 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("error", e.getMessage());
                         }else{
                            Log.d("results", result.toString());
-                            //JsonObject data = result.get("data");
-                            JsonObject response = result.getAsJsonObject("response");
-                            JsonObject data = response.getAsJsonObject("data");
-                            Log.d("income", data.get("income").toString());
-                            setViews(data);
+                           JsonResponse jp = new JsonResponse(result);
+                            setViews(jp.getData());
                         }
                     }
                 });

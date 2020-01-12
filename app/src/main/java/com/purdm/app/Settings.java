@@ -30,4 +30,15 @@ public class Settings {
     public String getString(String key, String default_value){
         return this.getSettings().getString(key,default_value);
     }
+
+    public void logoutUser(){
+        SharedPreferences.Editor editor = this.getSettings().edit();
+        editor.remove(Constants.SETTINGS_API_TAG);
+        editor.remove(Constants.SETTING_EMAIL_TAG);
+        editor.commit();
+    }
+
+    public boolean isUserLoggedIn(){
+        return this.getSettings().contains(Constants.SETTINGS_API_TAG);
+    }
 }
