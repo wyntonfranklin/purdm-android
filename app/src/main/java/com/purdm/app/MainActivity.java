@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     Api api;
     public static final String MyPREFERENCES = "MyPrefs" ;
     Settings settings;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle("Purdm - Your expense manager");
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,13 +71,19 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         if (id== R.id.action_logout){
             settings.logoutUser();
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
+            finish();
+        }
+        if(id == R.id.action_refresh){
+            new httpTask().execute();
+        }
+        if(id == R.id.action_recent_transactions){
+            Intent intent = new Intent(this, TransactionsActivity.class);
+            startActivity(intent);
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -92,10 +99,27 @@ public class MainActivity extends AppCompatActivity {
                         // do stuff with the result or error
                         if( e != null ){
                             Log.d("error", e.getMessage());
+                            Snackbar.make(fab, "An error occurred", Snackbar.LENGTH_LONG)
+                                    .setAction("Retry", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            new httpTask().execute();
+                                        }
+                                    }).show();
                         }else{
                            Log.d("results", result.toString());
-                           JsonResponse jp = new JsonResponse(result);
-                            setViews(jp.getData());
+                           JsonResponse res = new JsonResponse(result);
+                           if(res.isGood()){
+                               setViews(res.getData());
+                           }else{
+                               Snackbar.make(fab, res.getMessage(), Snackbar.LENGTH_LONG)
+                                       .setAction("Retry", new View.OnClickListener() {
+                                           @Override
+                                           public void onClick(View view) {
+                                               new httpTask().execute();
+                                           }
+                                       }).show();
+                           }
                         }
                     }
                 });
