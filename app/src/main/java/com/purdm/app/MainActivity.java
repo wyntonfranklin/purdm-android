@@ -85,6 +85,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+        if(id == R.id.action_insights){
+            Intent intent = new Intent(this, InsightsActivity.class);
+            startActivity(intent);
+            finish();
+        }
         return super.onOptionsItemSelected(item);
     }
 

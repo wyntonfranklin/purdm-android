@@ -97,9 +97,8 @@ public class TransactionModel {
     }
 
     public String getHeader(){
-        String ucCategory = this.category.substring(0, 1).toUpperCase()
-                + this.category.substring(1);
-        String money = "$" + String.format("%,.2f", Float.valueOf(this.amount));
+        String ucCategory = this.category;
+        String money = this.amount;
         return ucCategory + " - " + money;
     }
 

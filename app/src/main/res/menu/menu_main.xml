@@ -12,7 +12,13 @@
     <item
         android:id="@+id/action_recent_transactions"
         android:orderInCategory="99"
-        android:title="Recent Transactions"
+        android:title="Transactions"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_insights"
+        android:orderInCategory="99"
+        android:title="Insights"
         app:showAsAction="never" />
 
     <item

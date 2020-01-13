@@ -103,4 +103,8 @@ public class JsonResponse {
         }
         return false;
     }
+
+    public JsonArray getJsonArrayFromData(String tag){
+        return this.getData().getAsJsonArray(tag);
+    }
 }
