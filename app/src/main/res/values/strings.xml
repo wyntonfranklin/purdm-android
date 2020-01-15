@@ -11,4 +11,44 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="title_activity_insights">Insights</string>
+    <string name="title_activity_create_transaction">Create Transaction</string>
+    <string name="country_prompt">Choose a country</string>
+
+    <string-array name="country_arrays">
+        <item>Malaysia</item>
+        <item>United States</item>
+        <item>Indonesia</item>
+        <item>France</item>
+        <item>Italy</item>
+        <item>Singapore</item>
+        <item>New Zealand</item>
+        <item>India</item>
+    </string-array>
+
+    <string-array name="transTypes">
+        <item>expense</item>
+        <item>income</item>
+    </string-array>
+
+    <string-array name="accounts">
+        <item>Account one</item>
+        <item>Account two</item>
+    </string-array>
+
+    <string-array name="categories">
+        <item>Bills</item>
+        <item>Food</item>
+        <item>Groceries</item>
+        <item>Telephone</item>
+    </string-array>
+
+    <string-array name="frequency">
+        <item>None</item>
+        <item>Every Year</item>
+        <item>Every Month</item>
+        <item>Every Week</item>
+        <item>Every day</item>
+    </string-array>
+
+
 </resources>

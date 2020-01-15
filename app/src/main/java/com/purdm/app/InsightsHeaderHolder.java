@@ -31,7 +31,8 @@ public class InsightsHeaderHolder extends RecyclerView.ViewHolder {
             float value = (float) 3.0;
             InsightsModel model = insights.get(i);
             if(model.getType().equals("view")){
-                mPieChart.addPieSlice(new PieModel(model.getLabel(), model.getFloatAmount(), Color.parseColor(model.getColor())));
+                mPieChart.addPieSlice(new PieModel(model.getLabel(),
+                        model.getFloatAmount(), Color.parseColor(model.getColor())));
             }
         }
     }

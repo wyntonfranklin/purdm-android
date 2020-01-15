@@ -15,6 +15,7 @@ import com.koushikdutta.ion.Ion;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,6 +51,9 @@ public class InsightsActivity extends AppCompatActivity {
         rv = findViewById(R.id.rv);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(rv.getContext(),
+                llm.getOrientation());
+        rv.addItemDecoration(dividerItemDecoration);
         //header = findViewById(R.id.header);
         //mPieChart = header.findViewById(R.id.piechart);
         insights = new ArrayList<>();

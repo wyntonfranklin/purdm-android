@@ -2,30 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp"
+    android:padding="10dp"
+    android:background="#fff"
     >
+
+    <View
+        android:id="@+id/color"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:background="#ddd"
+        android:padding="5px"
+        android:layout_marginRight="7px"
+        android:text="" />
 
     <TextView
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="TextView"
+        android:text=""
+        android:textAllCaps="true"
         android:textColor="#545454"
-        android:typeface="sans"
-        android:textStyle="bold"/>
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:typeface="sans" />
 
     <TextView
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="0.5"
+        android:textStyle="bold"
+        android:textSize="17sp"
         android:text="" />
 
     <TextView
         android:id="@+id/percentage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="0.5"
+        android:textStyle="bold"
         android:text="" />
 </LinearLayout>

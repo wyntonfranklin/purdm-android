@@ -40,6 +40,11 @@ public class InsightsModel {
         return percentage;
     }
 
+    public Float getFloatPercentage(){
+        String ft = String.format ("%,.2f", Float.parseFloat(this.percentage));
+        return Float.parseFloat(ft);
+    }
+
     public void setPercentage(String percentage) {
         this.percentage = percentage;
     }
@@ -49,7 +54,8 @@ public class InsightsModel {
     }
 
     public Float getFloatAmount(){
-        return Float.parseFloat(this.getAmount());
+        String ft = String.format ("%,.2f", Float.parseFloat(this.amount));
+        return Float.parseFloat(ft);
     }
 
     public void setAmount(String amount) {

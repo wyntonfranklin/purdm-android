@@ -22,6 +22,7 @@
 
     </LinearLayout>
 
+
     <!-- Title Of Song-->
     <TextView
         android:id="@+id/header"
@@ -73,19 +74,5 @@
         android:textColor="#ff0000"
         android:textStyle="bold"/>
 
-    <TextView
-        android:id="@+id/Id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:text=""
-        android:visibility="gone" />
-
-    <View
-        android:layout_below="@+id/description"
-        android:layout_width="fill_parent"
-        android:layout_height="1dip"
-        android:background="#ededed" />
 
 </RelativeLayout>

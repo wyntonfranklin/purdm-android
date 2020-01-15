@@ -49,11 +49,15 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(MainActivity.this, CreateTransactionActivity.class);
+                startActivity(intent);
             }
         });
-        new httpTask().execute();
+        if(settings.isDashboardSaved() == true){
+            loadDashboardFromSettings();
+        }else{
+            new httpTask().execute();
+        }
     }
 
     @Override
@@ -83,12 +87,10 @@ public class MainActivity extends AppCompatActivity {
         if(id == R.id.action_recent_transactions){
             Intent intent = new Intent(this, TransactionsActivity.class);
             startActivity(intent);
-            finish();
         }
         if(id == R.id.action_insights){
             Intent intent = new Intent(this, InsightsActivity.class);
             startActivity(intent);
-            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -130,9 +132,28 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    public void loadDashboardFromSettings(){
+        MainActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                DashBoardModel model = settings.getDashboardModel();
+                try{
+                    inView.setText(model.getIncome());
+                    exView.setText(model.getExpenses());
+                    savingsView.setText(model.getSavings());
+                    networthView.setText(model.getNetworth());
+
+                }catch (Exception e){
+                    Log.d("error", e.getMessage());
+                }
+            }
+        });
+    }
+
 
     public void setViews(JsonObject data){
         DashBoardModel model = new DashBoardModel(data);
+        settings.saveDashboardModel(model);
         try{
             inView.setText(model.getIncome());
             exView.setText(model.getExpenses());
@@ -143,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("error", e.getMessage());
         }
     }
+
 
     class httpTask extends AsyncTask<String, String, String> {
 

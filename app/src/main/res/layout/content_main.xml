@@ -29,7 +29,7 @@
                     android:textColor="#000000"
                     android:layout_weight="0"
                     android:layout_marginBottom="10dp"
-                    android:text="Showing data for Jan 2020"
+                    android:text="Showing data for this month"
                     android:drawablePadding="@dimen/fab_margin"
                     android:drawableLeft="@drawable/purple_calendar"/>
 

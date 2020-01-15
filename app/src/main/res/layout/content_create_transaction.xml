@@ -1,0 +1,218 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    >
+
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:background="#CCCCCC"
+            android:fillViewport="false">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:background="#FFFFFF">
+
+
+
+                <TextView
+                    android:id="@+id/header1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:textColor="#545454"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:text="Transaction Type and Account"/>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/account_col"
+                    android:layout_below="@+id/header1"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:layout_weight="0.5"
+                        android:id="@+id/transType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:entries="@array/transTypes" />
+
+                    <Spinner
+                        android:layout_weight="0.5"
+                        android:id="@+id/accounts"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:entries="@array/accounts" />
+
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/category_date_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/account_col"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:textColor="#545454"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:text="Category and Date"/>
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/category_date_column"
+                    android:padding="5dp"
+                    android:layout_below="@+id/category_date_header"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:paddingLeft="5dp"
+                        android:layout_weight="1"
+                        android:hint="Category"
+                        android:textSize="17sp"/>
+
+                    <EditText
+                        android:id="@+id/transDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:paddingLeft="5dp"
+                        android:layout_weight="1"
+                        android:hint="Date"
+                        android:textSize="17sp"/>
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/description_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/category_date_column"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:textColor="#545454"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:text="Description"/>
+
+
+                <EditText
+                    android:id="@+id/transDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:layout_weight="1"
+                    android:hint="Describe the transaction"
+                    android:textSize="17sp"
+                    android:layout_below="@+id/description_header"/>
+
+
+                <TextView
+                    android:id="@+id/amount_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/transDescription"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:textColor="#545454"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:text="Transaction Amount"/>
+
+
+                <EditText
+                    android:id="@+id/amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:layout_weight="1"
+                    android:hint="Enter amount"
+                    android:textSize="17sp"
+                    android:layout_below="@+id/amount_header"/>
+
+
+                <TextView
+                    android:id="@+id/frequency_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/amount"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:textColor="#545454"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:text="Repeat Frequency"/>
+
+                <Spinner
+                    android:layout_weight="0.5"
+                    android:id="@+id/frequency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/frequency"
+                    android:prompt="@string/country_prompt"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_below="@+id/frequency_header"
+                    />
+
+
+                <TextView
+                    android:id="@+id/memo_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/frequency"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:textColor="#545454"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:text="Memo"/>
+
+                <EditText
+                    android:id="@+id/memo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:layout_weight="1"
+                    android:hint="Enter additional memo"
+                    android:textSize="17sp"
+                    android:layout_below="@+id/memo_header"/>
+
+
+            </RelativeLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+</LinearLayout>
+

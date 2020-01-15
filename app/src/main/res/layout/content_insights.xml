@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".InsightsActivity"
+    android:background="#fff"
     tools:showIn="@layout/activity_insights">
 
 

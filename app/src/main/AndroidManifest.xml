@@ -12,9 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".CreateTransactionActivity"
+            android:label="@string/title_activity_create_transaction"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".InsightsActivity"
             android:label="@string/title_activity_insights"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".TransactionsActivity"
             android:theme="@style/AppTheme.NoActionBar" />

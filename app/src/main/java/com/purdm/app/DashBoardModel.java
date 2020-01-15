@@ -11,6 +11,8 @@ public class DashBoardModel {
     private String savings;
     private String networth;
 
+    public DashBoardModel(){}
+
     protected DashBoardModel(JsonObject in) {
         try{
             this.income = in.get("income").getAsString();
