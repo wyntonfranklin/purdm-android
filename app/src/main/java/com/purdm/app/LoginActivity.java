@@ -2,6 +2,7 @@ package com.purdm.app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     Button login;
     EditText domain, email, password;
     ProgressBar pb;
+    ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,10 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.username);
         password = findViewById(R.id.password);
         login = findViewById(R.id.login);
-        pb = findViewById(R.id.loading);
+        progress = new ProgressDialog(this);
+        progress.setMessage("Loading");
+        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progress.setIndeterminate(true);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,7 +72,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void loginUser(){
-        pb.setVisibility(View.VISIBLE);
         String userEmail = email.getText().toString();
         String userPassword = password.getText().toString();
         settings.insertAsString("email", userEmail);
@@ -83,7 +87,6 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         // do stuff with the result or error
-                        pb.setVisibility(View.GONE);
                         if( e != null ){
                             Snackbar.make(email, "An error occurred", Snackbar.LENGTH_LONG)
                                     .setAction("Retry", new View.OnClickListener() {
@@ -128,6 +131,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progress.show();
         }
 
         @Override
@@ -142,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
             LoginActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
+                    progress.dismiss();
                 }
             });
         }

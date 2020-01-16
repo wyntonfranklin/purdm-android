@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ public class TransactionsActivity extends AppCompatActivity {
     List<TransactionModel> transactions;
     Api api = null;
     TransactionsAdapter adapter;
+    ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,10 @@ public class TransactionsActivity extends AppCompatActivity {
         transactions = new ArrayList<>();
         adapter = new TransactionsAdapter(transactions);
         rv.setAdapter(adapter);
+        progress = new ProgressDialog(this);
+        progress.setMessage("Loading");
+        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progress.setIndeterminate(true);
         new httpTask().execute();
     }
 
@@ -69,6 +75,7 @@ public class TransactionsActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progress.show();
         }
 
         @Override
@@ -83,7 +90,7 @@ public class TransactionsActivity extends AppCompatActivity {
             TransactionsActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                   // adapter.refreshAdapter(transactions);
+                   progress.dismiss();
                 }
             });
         }

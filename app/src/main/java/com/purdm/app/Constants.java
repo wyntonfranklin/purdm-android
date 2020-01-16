@@ -10,4 +10,11 @@ public class Constants {
     public static final String RECENT_TRANSACTIONS_ACTION_TAG = "rt";
     public static final String EXPENSES_BY_CATEGORY_ACTION_TAG = "ec";
     public static final String SETTING_EMAIL_TAG ="email";
+    public static final String DB_LOCAL_TRANSACTIONS = "local_transaction";
+    public static final String DB_RECENT_TRANSACTIONS = "recent_transactions";
+    public static final String DB_ACCOUNTS = "accounts";
+    public static final String DB_CATEGORIES = "categories";
+    public static final String DB_INSIGHTS = "insights";
+    public static final String DB_SETTINGS = "settings";
+
 }

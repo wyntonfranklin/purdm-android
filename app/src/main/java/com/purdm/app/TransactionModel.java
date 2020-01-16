@@ -1,5 +1,7 @@
 package com.purdm.app;
 
+import android.content.ContentValues;
+
 import com.google.gson.JsonObject;
 
 public class TransactionModel {
@@ -105,5 +107,10 @@ public class TransactionModel {
     public String getTransType(){
         return this.transType.substring(0, 1).toUpperCase()
                 + this.transType.substring(1);
+    }
+
+    public ContentValues getValues(){
+        ContentValues values = new ContentValues();
+        return values;
     }
 }

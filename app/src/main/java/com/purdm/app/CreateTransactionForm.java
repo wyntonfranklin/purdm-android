@@ -36,8 +36,35 @@ public class CreateTransactionForm {
         return this.memo.getText().toString();
     }
 
+    public String getAmount(){
+        return this.amount.getText().toString();
+    }
+
+    public String getAccount(){
+        return "1";
+    }
+
+    public String getFrequency(){
+        return "";
+    }
+
+    public String getDate(){
+        return "";
+    }
+
+    public String getType(){
+        return "expense";
+    }
+
     public Boolean validate(){
         return false;
+    }
+
+    public void clearForm(){
+        this.category.setText("");
+        this.description.setText("");
+        this.amount.setText("");
+        this.memo.setText("");
     }
 
     @Override

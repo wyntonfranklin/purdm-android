@@ -42,6 +42,11 @@ public class Api {
         return this.getFinalUrl() + val + this.getKey();
     }
 
+    public String createTransactionUrl(){
+        this.setRequest("post");
+        return this.getFinalUrl() + "create_transaction" + this.getKey();
+    }
+
     public String getRequest() {
         return request;
     }

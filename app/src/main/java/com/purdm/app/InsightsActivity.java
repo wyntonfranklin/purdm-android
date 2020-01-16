@@ -1,5 +1,6 @@
 package com.purdm.app;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -38,6 +39,7 @@ public class InsightsActivity extends AppCompatActivity {
     InsightsAdapter adapter;
     RecyclerViewHeader header;
     PieChart mPieChart;
+    ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,10 @@ public class InsightsActivity extends AppCompatActivity {
         insights = new ArrayList<>();
         adapter = new InsightsAdapter(insights);
         rv.setAdapter(adapter);
+        progress = new ProgressDialog(this);
+        progress.setMessage("Loading");
+        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progress.setIndeterminate(true);
         new httpTask().execute();
 
     }
@@ -79,6 +85,7 @@ public class InsightsActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
+            progress.show();
             super.onPreExecute();
         }
 
@@ -91,10 +98,10 @@ public class InsightsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            progress.dismiss();
             InsightsActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    //adapter.refreshAdapter(transactions);
                 }
             });
         }
