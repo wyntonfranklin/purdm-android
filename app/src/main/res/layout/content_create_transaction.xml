@@ -34,7 +34,7 @@
                     android:textColor="#545454"
                     android:layout_marginBottom="10dp"
                     android:paddingLeft="5dp"
-                    android:text="Transaction Type and Account"/>
+                    android:text="Type and Account"/>
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -54,8 +54,7 @@
                         android:layout_weight="0.5"
                         android:id="@+id/accounts"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:entries="@array/accounts" />
+                        android:layout_height="wrap_content" />
 
 
                 </LinearLayout>
@@ -83,7 +82,7 @@
                     android:layout_below="@+id/category_date_header"
                     android:orientation="horizontal">
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/category"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -143,7 +142,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:paddingLeft="5dp"
-                    android:text="Transaction Amount"/>
+                    android:text="Amount"/>
 
 
                 <EditText

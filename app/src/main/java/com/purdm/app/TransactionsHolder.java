@@ -34,7 +34,7 @@ public class TransactionsHolder extends RecyclerView.ViewHolder implements View.
         description.setText(transFooter);
         subTitle.setText(model.getTransDate());
         rightContent.setText(model.getTransType());
-        if(model.transType.equals("income")){
+        if(model.getTransType().equals("Income")){
             rightContent.setTextColor(
                 itemView.getContext()
                     .getResources()

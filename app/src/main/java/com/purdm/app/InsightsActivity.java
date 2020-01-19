@@ -2,6 +2,7 @@ package com.purdm.app;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -40,6 +42,8 @@ public class InsightsActivity extends AppCompatActivity {
     RecyclerViewHeader header;
     PieChart mPieChart;
     ProgressDialog progress;
+    DatabaseConfig db;
+    Boolean freshRecords = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,7 @@ public class InsightsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        db = new DatabaseConfig(this);
         api = new Api(new Settings(this));
         rv = findViewById(R.id.rv);
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -56,8 +61,6 @@ public class InsightsActivity extends AppCompatActivity {
         RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(rv.getContext(),
                 llm.getOrientation());
         rv.addItemDecoration(dividerItemDecoration);
-        //header = findViewById(R.id.header);
-        //mPieChart = header.findViewById(R.id.piechart);
         insights = new ArrayList<>();
         adapter = new InsightsAdapter(insights);
         rv.setAdapter(adapter);
@@ -70,12 +73,23 @@ public class InsightsActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_insights, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == android.R.id.home){
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
+        }
+        if(id == R.id.action_refresh){
+            freshRecords = true;
+            new httpTask().execute();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -91,7 +105,12 @@ public class InsightsActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            loadPageData();
+            Cursor results = db.getInsights();
+            if(results.getCount() > 0 && freshRecords==false){
+                loadPageDataFromDb(results);
+            }else{
+                loadPageData();
+            }
             return null;
         }
 
@@ -108,7 +127,26 @@ public class InsightsActivity extends AppCompatActivity {
 
     }
 
+    public void loadPageDataFromDb(final Cursor data){
+        insights.clear();
+        insights.add(new InsightsModel("header")); // empty for header
+        InsightsActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(data.moveToNext()){
+                    do {
+                        InsightsModel model =  new InsightsModel(data);
+                        insights.add(model);
+                    }while (data.moveToNext());
+                }
+                adapter.refreshAdapter(insights);
+
+            }
+        });
+    }
+
     public void loadPageData(){
+        insights.clear();
         Ion.with(this)
                 .load(api.getAction(Constants.EXPENSES_BY_CATEGORY_ACTION_TAG))
                 .setLogging("MyLogs", Log.DEBUG)
@@ -146,6 +184,7 @@ public class InsightsActivity extends AppCompatActivity {
     }
 
     public void loadInsights(JsonResponse jr){
+        db.clearAllInsights();
         JsonArray labels = jr.getJsonArrayFromData("labels");
         JsonArray colors = jr.getJsonArrayFromData("colors");
         JsonArray percentages = jr.getJsonArrayFromData("percentages");
@@ -157,27 +196,12 @@ public class InsightsActivity extends AppCompatActivity {
             model.setAmount(amounts.get(i).getAsString());
            Log.d("label", model.getLabel());
             insights.add(model);
+            db.addInsights(model);
         }
-       // loadPieChart(insights);
         adapter.refreshAdapter(insights);
 
 
     }
 
-    public void loadPieChart(final List<InsightsModel> insights) {
-        mPieChart.clearChart();
-        runOnUiThread(new Runnable() {
-            public void run() {
-                for(int i=0; i<= insights.size()-1; i++){
-                    float value = (float) 3.0;
-                    InsightsModel model = insights.get(i);
-                    mPieChart.addPieSlice(new PieModel(model.getLabel(), value+i, Color.parseColor(model.getColor())));
-                }
-                Log.d("console","Loading pie chart");
-              //  mPieChart.startAnimation();
-            }
-
-        });
-    }
 
 }

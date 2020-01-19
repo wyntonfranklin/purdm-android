@@ -1,6 +1,7 @@
 package com.purdm.app;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import com.google.gson.JsonObject;
 
@@ -33,6 +34,21 @@ public class TransactionModel {
         }catch (Exception e){
 
         }
+    }
+
+    public TransactionModel(Cursor cursor) {
+        try{
+            this.transDate = cursor.getString(1);
+            this.amount = cursor.getString(2);
+            this.description = cursor.getString(3);
+            this.category = cursor.getString(4);
+            this.transType = cursor.getString(5);
+            this.memo = cursor.getString(6);
+            this.accountName = cursor.getString(7);
+        }catch (Exception e ){
+
+        }
+
     }
 
 
@@ -111,6 +127,13 @@ public class TransactionModel {
 
     public ContentValues getValues(){
         ContentValues values = new ContentValues();
+        values.put("trans_date", this.getTransDate());
+        values.put("amount", this.getAmount());
+        values.put("description", this.getDescription());
+        values.put("category", this.getCategory());
+        values.put("type",this.getTransType());
+        values.put("memo", this.getMemo());
+        values.put("account", this.getAccountName());
         return values;
     }
 }

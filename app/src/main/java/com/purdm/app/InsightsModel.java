@@ -1,5 +1,9 @@
 package com.purdm.app;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.util.Log;
+
 public class InsightsModel {
 
     public String label;
@@ -18,6 +22,17 @@ public class InsightsModel {
         this.label = label;
         this.color = color;
         this.percentage = percentage;
+    }
+
+    public InsightsModel(Cursor data) {
+        try{
+            this.label = data.getString(1);
+            this.percentage = data.getString(2);
+            this.amount = data.getString(3);
+            this.color = data.getString(4);
+        }catch (Exception e ){
+
+        }
     }
 
     public String getLabel() {
@@ -50,11 +65,14 @@ public class InsightsModel {
     }
 
     public String getAmount() {
-        return amount;
+
+        return String.format ("%,.2f", Float.parseFloat(this.amount));
     }
 
     public Float getFloatAmount(){
-        String ft = String.format ("%,.2f", Float.parseFloat(this.amount));
+        String money = this.amount.replaceAll(",","");
+        Log.d("money", money);
+        String ft = String.format ("%.2f", Float.parseFloat(money));
         return Float.parseFloat(ft);
     }
 
@@ -68,5 +86,14 @@ public class InsightsModel {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public ContentValues getValues(){
+        ContentValues values = new ContentValues();
+        values.put("label", this.getLabel());
+        values.put("percentage", this.getPercentage());
+        values.put("amount", this.getAmount());
+        values.put("color",this.getColor());
+        return values;
     }
 }

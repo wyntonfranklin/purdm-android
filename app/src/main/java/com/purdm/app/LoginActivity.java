@@ -15,9 +15,12 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+
+import org.json.JSONArray;
 
 import java.net.InetAddress;
 
@@ -27,8 +30,8 @@ public class LoginActivity extends AppCompatActivity {
     Api api = null;
     Button login;
     EditText domain, email, password;
-    ProgressBar pb;
     ProgressDialog progress;
+    DatabaseConfig db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         progress.setMessage("Loading");
         progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progress.setIndeterminate(true);
+        db = new DatabaseConfig(this);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
             password.setError("Please enter password");
         }else{
             settings.insertAsString("domain",userDomain);
-            loginUser();
+            new httpTask().execute();
         }
     }
 
@@ -96,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                     }).show();
                         }else{
-                           // Log.d("results", result.toString());
+                            Log.d("results", result.toString());
                             JsonResponse jr = new JsonResponse(result);
                             Log.d("results", jr.getStatus());
                             if(jr.isGood()){
@@ -104,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.d("data", jr.getDataKeyAsString("apiKey"));
                                     settings.insertAsString(Constants.SETTINGS_API_TAG,
                                             jr.getDataKeyAsString(Constants.SERVER_API_TAG));
-                                    goToDashboard();
+                                    updateUserPreferences(jr);
                                 }
                             }else{
                                 Snackbar.make(email, jr.getMessage(), Snackbar.LENGTH_LONG)
@@ -118,6 +122,29 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    public void updateUserPreferences(JsonResponse resp){
+        db.clearAccounts(); db.clearCategories(); db.clearAllInsights();
+        db.clearAllRecentTransactions(); // referesh all data
+        JsonArray cats = resp.getJsonArrayFromData("categories");
+        JsonArray accounts = resp.getJsonArrayFromData("accounts");
+        Log.d("categories", cats.toString());
+        Log.d("accounts", accounts.toString());
+        for(int i=0; i<= cats.size()-1; i++){
+            db.addCategories(cats.get(i).getAsString());
+            Log.d("add category", cats.get(i).getAsString());
+        }
+
+        for(int i=0; i<= accounts.size()-1; i++){
+            JsonObject obj = accounts.get(i).getAsJsonObject();
+            db.addAccount(obj.get("name").getAsString(), obj.get("id").getAsInt());
+            Log.d("add account", obj.toString());
+        }
+
+        goToDashboard();
+
+
     }
 
     public void goToDashboard(){

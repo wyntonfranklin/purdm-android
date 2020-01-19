@@ -46,6 +46,7 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsHolder
     }
 
     public void refreshAdapter(List<TransactionModel> models){
+        //this.transactions.clear();
         this.transactions = models;
         this.notifyDataSetChanged();
     }

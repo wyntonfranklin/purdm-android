@@ -68,7 +68,7 @@ public class CreateTransactionActivity extends AppCompatActivity {
                 .load(api.createTransactionUrl())
                 .setLogging("MyLogs", Log.DEBUG)
                 .setBodyParameter("transType", form.getType())
-                .setBodyParameter("account", form.getAccount())
+                .setBodyParameter("account", form.getAccountId())
                 .setBodyParameter("category", form.getCategory())
                 .setBodyParameter("transDate",form.getDate())
                 .setBodyParameter("description", form.getDescription())

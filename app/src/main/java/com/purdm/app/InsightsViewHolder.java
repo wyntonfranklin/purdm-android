@@ -31,7 +31,7 @@ public class InsightsViewHolder extends RecyclerView.ViewHolder {
     public void mapView(InsightsModel insightsModel) {
         if(insightsModel.type.equals("view")){
             header.setText(insightsModel.getLabel());
-            subTitle.setText( "$" + String.valueOf(insightsModel.getFloatAmount()));
+            subTitle.setText( "$" + insightsModel.getAmount());
             percentage.setText(String.valueOf(insightsModel.getFloatPercentage()) + "%");
             color.setBackgroundColor(Color.parseColor(insightsModel.getColor()));
         }

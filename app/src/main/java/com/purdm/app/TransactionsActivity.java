@@ -8,9 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -32,6 +34,8 @@ public class TransactionsActivity extends AppCompatActivity {
     Api api = null;
     TransactionsAdapter adapter;
     ProgressDialog progress;
+    DatabaseConfig db;
+    Boolean freshRecords = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,7 @@ public class TransactionsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         rv = findViewById(R.id.rv);
+        db = new DatabaseConfig(this);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
         RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(rv.getContext(),
@@ -60,12 +65,23 @@ public class TransactionsActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_transactions, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == android.R.id.home){
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
+        }
+        if(id == R.id.action_refresh){
+            freshRecords = true;
+            new httpTask().execute();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -75,12 +91,18 @@ public class TransactionsActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            transactions.clear();
             progress.show();
         }
 
         @Override
         protected String doInBackground(String... strings) {
-            loadPageData();
+            Cursor results = db.getRecentTransactions();
+            if(results.getCount() > 0 && freshRecords==false){
+                loadPageFromDb(results);
+            }else{
+                loadPageData();
+            }
             return null;
         }
 
@@ -95,6 +117,24 @@ public class TransactionsActivity extends AppCompatActivity {
             });
         }
 
+    }
+
+
+    public void loadPageFromDb(final Cursor data){
+        transactions.clear();
+        TransactionsActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(data.moveToNext()){
+                    do {
+                        TransactionModel model =  new TransactionModel(data);
+                        transactions.add(model);
+                    }while (data.moveToNext());
+                }
+                adapter.refreshAdapter(transactions);
+
+            }
+        });
     }
 
     public void loadPageData(){
@@ -135,11 +175,15 @@ public class TransactionsActivity extends AppCompatActivity {
     }
 
     public void loadTransactions(JsonArray data) {
+        db.clearAllRecentTransactions();
+        transactions.clear();
         for(int i=0; i<= data.size()-1; i++){
             JsonObject obj = data.get(i).getAsJsonObject();
             TransactionModel model = new TransactionModel(obj);
             transactions.add(model);
+            db.addRecentTransactions(model);
         }
         adapter.refreshAdapter(transactions);
     }
+
 }
