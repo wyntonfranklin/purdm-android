@@ -65,8 +65,8 @@ public class InsightsModel {
     }
 
     public String getAmount() {
-
-        return String.format ("%,.2f", Float.parseFloat(this.amount));
+        String money = this.amount.replaceAll(",","");
+        return String.format ("%,.2f", Float.parseFloat(money));
     }
 
     public Float getFloatAmount(){

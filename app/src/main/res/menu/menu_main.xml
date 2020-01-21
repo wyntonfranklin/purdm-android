@@ -4,21 +4,15 @@
     tools:context="com.purdm.app.MainActivity">
 
     <item
-        android:id="@+id/action_refresh"
-        android:orderInCategory="98"
-        android:title="Refresh"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/action_recent_transactions"
         android:orderInCategory="99"
-        android:title="Transactions"
+        android:title="View Transactions"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_insights"
         android:orderInCategory="99"
-        android:title="Insights"
+        android:title="View Insights"
         app:showAsAction="never" />
 
     <item

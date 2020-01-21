@@ -15,6 +15,7 @@ import com.koushikdutta.ion.Ion;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.View;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     Settings settings;
     FloatingActionButton fab;
     ProgressDialog progress;
+    SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +52,25 @@ public class MainActivity extends AppCompatActivity {
         progress.setMessage("Loading");
         progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progress.setIndeterminate(true);
-
+        swipeContainer = findViewById(R.id.swipeContainer);
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, CreateTransactionActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new httpTask().execute();
+
             }
         });
         if(settings.isDashboardSaved() == true){
@@ -86,9 +100,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
-        }
-        if(id == R.id.action_refresh){
-            new httpTask().execute();
         }
         if(id == R.id.action_recent_transactions){
             Intent intent = new Intent(this, TransactionsActivity.class);
@@ -177,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progress.show();
+            swipeContainer.setRefreshing(true);
         }
 
         @Override
@@ -192,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
             MainActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    progress.dismiss();
+                    swipeContainer.setRefreshing(false);
                 }
             });
         }

@@ -20,6 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.Menu;
@@ -44,6 +45,7 @@ public class InsightsActivity extends AppCompatActivity {
     ProgressDialog progress;
     DatabaseConfig db;
     Boolean freshRecords = false;
+    SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,19 @@ public class InsightsActivity extends AppCompatActivity {
         progress.setMessage("Loading");
         progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progress.setIndeterminate(true);
+        swipeContainer = findViewById(R.id.swipeContainer);
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                freshRecords = true;
+                new httpTask().execute();
+
+            }
+        });
         new httpTask().execute();
 
     }
@@ -83,13 +98,7 @@ public class InsightsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == android.R.id.home){
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
             finish();
-        }
-        if(id == R.id.action_refresh){
-            freshRecords = true;
-            new httpTask().execute();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -99,7 +108,7 @@ public class InsightsActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            progress.show();
+            swipeContainer.setRefreshing(true);
             super.onPreExecute();
         }
 
@@ -117,10 +126,10 @@ public class InsightsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            progress.dismiss();
             InsightsActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    swipeContainer.setRefreshing(false);
                 }
             });
         }

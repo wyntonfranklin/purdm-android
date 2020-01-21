@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -44,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         login = findViewById(R.id.login);
         progress = new ProgressDialog(this);
         progress.setMessage("Loading");
-        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progress.setIndeterminate(true);
         db = new DatabaseConfig(this);
         login.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void getDomain(){
+        Helper.hideKeyboard(LoginActivity.this);
         String userDomain = domain.getText().toString();
         if(domain.getText().toString().isEmpty()){
             domain.setError("Please enter domain");
@@ -108,7 +110,17 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.d("data", jr.getDataKeyAsString("apiKey"));
                                     settings.insertAsString(Constants.SETTINGS_API_TAG,
                                             jr.getDataKeyAsString(Constants.SERVER_API_TAG));
-                                    updateUserPreferences(jr);
+                                    try{
+                                        updateUserPreferences(jr);
+                                    }catch (Exception error){
+                                        Snackbar.make(email, error.getMessage(), Snackbar.LENGTH_LONG)
+                                                .setAction("Retry", new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        loginUser();
+                                                    }
+                                                }).show();
+                                    }
                                 }
                             }else{
                                 Snackbar.make(email, jr.getMessage(), Snackbar.LENGTH_LONG)
@@ -124,26 +136,32 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    public void updateUserPreferences(JsonResponse resp){
+    public void updateUserPreferences(JsonResponse resp) throws Exception {
         db.clearAccounts(); db.clearCategories(); db.clearAllInsights();
         db.clearAllRecentTransactions(); // referesh all data
         JsonArray cats = resp.getJsonArrayFromData("categories");
         JsonArray accounts = resp.getJsonArrayFromData("accounts");
         Log.d("categories", cats.toString());
         Log.d("accounts", accounts.toString());
-        for(int i=0; i<= cats.size()-1; i++){
-            db.addCategories(cats.get(i).getAsString());
-            Log.d("add category", cats.get(i).getAsString());
+        if(cats.size()-1 <=0){
+            throw new Exception("Error while adding categories");
+        }else{
+            for(int i=0; i<= cats.size()-1; i++){
+                db.addCategories(cats.get(i).getAsString());
+                Log.d("add category", cats.get(i).getAsString());
+            }
         }
-
-        for(int i=0; i<= accounts.size()-1; i++){
-            JsonObject obj = accounts.get(i).getAsJsonObject();
-            db.addAccount(obj.get("name").getAsString(), obj.get("id").getAsInt());
-            Log.d("add account", obj.toString());
+        if(accounts.size()-1 <=0){
+            throw new Exception("No accounts created for this profile.");
+        }else{
+            for(int i=0; i<= accounts.size()-1; i++){
+                JsonObject obj = accounts.get(i).getAsJsonObject();
+                db.addAccount(obj.get("name").getAsString(), obj.get("id").getAsInt());
+                Log.d("add account", obj.toString());
+            }
         }
 
         goToDashboard();
-
 
     }
 

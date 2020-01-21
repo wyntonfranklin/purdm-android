@@ -1,6 +1,7 @@
 package com.purdm.app;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 
 public class CreateTransactionActivity extends AppCompatActivity {
 
@@ -35,10 +37,11 @@ public class CreateTransactionActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         progress = new ProgressDialog(this);
         progress.setMessage("Loading");
-        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progress.setIndeterminate(true);
         api = new Api(new Settings(this));
         form = new CreateTransactionForm(this);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     @Override
@@ -52,18 +55,27 @@ public class CreateTransactionActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == android.R.id.home){
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
             finish();
         }
         if(id == R.id.action_save){
             Log.d("form elements", form.toString());
-            new httpTask().execute();
+            saveTransaction();
         }
         return super.onOptionsItemSelected(item);
     }
 
+    public void saveTransaction(){
+        if(form.validate()){
+            new httpTask().execute();
+        }else{
+            Snackbar.make(form.getElementDescription(),
+                    "Errors in your form", Snackbar.LENGTH_LONG)
+                    .show();
+        }
+    }
+
     public void saveForm(){
+        form.saveTransaction(); //local db
         Ion.with( CreateTransactionActivity.this)
                 .load(api.createTransactionUrl())
                 .setLogging("MyLogs", Log.DEBUG)
@@ -78,21 +90,28 @@ public class CreateTransactionActivity extends AppCompatActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        // do stuff with the result or error
-                        //pb.setVisibility(View.GONE);
                         if( e != null ){
-
+                            Snackbar.make(form.getElementDescription(), "An error occurred.", Snackbar.LENGTH_LONG)
+                                    .setAction("Retry", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            saveTransaction();
+                                        }
+                                    }).show();
                         }else{
                              Log.d("results", result.toString());
                             JsonResponse jr = new JsonResponse(result);
                             Log.d("results", jr.getStatus());
                             if(jr.isGood()){
-                                form.clearForm();
-                                if(jr.hasData()){
-
-                                }
+                                finish();
                             }else{
-
+                                Snackbar.make(form.getElementDescription(), jr.getMessage(), Snackbar.LENGTH_LONG)
+                                        .setAction("Retry", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                saveTransaction();
+                                            }
+                                        }).show();
                             }
                         }
                     }
@@ -104,6 +123,7 @@ public class CreateTransactionActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            Helper.hideKeyboard(CreateTransactionActivity.this);
             progress.show();
         }
 
@@ -125,5 +145,6 @@ public class CreateTransactionActivity extends AppCompatActivity {
         }
 
     }
+
 
 }

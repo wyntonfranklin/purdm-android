@@ -1,16 +1,27 @@
 package com.purdm.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.squareup.timessquare.CalendarPickerView;
+
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class CreateTransactionForm {
 
@@ -23,6 +34,7 @@ public class CreateTransactionForm {
     private TextView description;
     private TextView amount;
     private TextView memo;
+    private String currentDate;
     public DatabaseConfig db;
     public List<String> accountsList;
     public List<String> accountsId;
@@ -42,8 +54,19 @@ public class CreateTransactionForm {
         this.transDate = m.findViewById(R.id.transDate);
         this.transType = m.findViewById(R.id.transType);
         this.db = new DatabaseConfig(this._context);
+        this.onInit();
+    }
+
+    public void onInit(){
         loadCategoriesFromDb();
         loadAccountsFromDb();
+
+        this.transDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              openCalendarView();
+            }
+        });
     }
 
 
@@ -80,13 +103,48 @@ public class CreateTransactionForm {
     }
 
     public Boolean validate(){
-        return false;
+
+        if(this.getDate().equals("")){
+            this.transDate.setError("Date cannot be blank");
+            return false;
+        }
+
+        if(this.validateTransDate() == false){
+            this.transDate.setError("Date is not correct format");
+            return false;
+        }
+        if(this.getDescription().equals("")){
+            this.description.setError("Description cannot be blank");
+            return false;
+        }
+        if(this.getAmount().equals("")){
+            this.amount.setError("Amount cannot be blank");
+            return false;
+        }
+        return true;
+    }
+
+    private Boolean validateTransDate(){
+        try{
+            SimpleDateFormat dateFormat = new SimpleDateFormat(
+                    "yyyy-MM-dd", Locale.getDefault());
+            Date dt = dateFormat.parse(this.getDate());
+            this.transDate.setError(null);
+            return true;
+        }catch (Exception e){
+            Log.d("Date error", e.getMessage());
+            return false;
+        }
     }
 
     public void clearForm(){
         this.description.setText("");
         this.amount.setText("");
         this.memo.setText("");
+    }
+
+    public TextView getElementDescription(){
+        return this.description;
     }
 
     public String getAccountId(){
@@ -114,12 +172,56 @@ public class CreateTransactionForm {
         this.accounts.setAdapter(dataAdapter);
     }
 
+
+    public void saveInDb(){
+
+    }
+
+    public void openCalendarView(){
+        View view;
+        Calendar nextYear = Calendar.getInstance();
+        nextYear.add(Calendar.YEAR, 1);
+        Calendar prevYear = Calendar.getInstance();
+        prevYear.add(Calendar.YEAR,-1);
+        LayoutInflater inflater=(LayoutInflater)this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        view =inflater.inflate(R.layout.calendar_layout,null);
+        final CalendarPickerView calendar = view.findViewById(R.id.calendar_view);
+        Date today = new Date();
+        calendar.init(prevYear.getTime(), nextYear.getTime())
+                  .withSelectedDate(today);
+        AlertDialog alertDialog = new AlertDialog.Builder(this._context).create();
+        alertDialog.setTitle("Select Day");
+        alertDialog.setView(view);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        transDate.setText(getDateTime(calendar.getSelectedDate()));
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
     @Override
     public String toString(){
         return getCategory() + ":"
             + getDescription() + ":"
             + getMemo() + ":"
                 + getAccountId();
+    }
+
+    private String getDateTime(Date date) {
+        try{
+            SimpleDateFormat dateFormat = new SimpleDateFormat(
+                    "yyyy-MM-dd", Locale.getDefault());
+            return dateFormat.format(date);
+        }catch (Exception e){
+            return "";
+        }
+    }
+
+    public void saveTransaction(){
+
     }
 
 }

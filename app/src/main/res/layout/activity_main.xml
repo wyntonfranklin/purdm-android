@@ -28,8 +28,10 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_white_coins_24" />
 
+
     <include layout="@layout/content_main" android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
