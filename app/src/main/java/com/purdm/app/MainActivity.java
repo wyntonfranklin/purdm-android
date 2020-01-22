@@ -105,6 +105,11 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, TransactionsActivity.class);
             startActivity(intent);
         }
+
+        if(id == R.id.action_pending_transactions){
+            Intent intent = new Intent(this, PendingTransactionsActivity.class);
+            startActivity(intent);
+        }
         if(id == R.id.action_insights){
             Intent intent = new Intent(this, InsightsActivity.class);
             startActivity(intent);

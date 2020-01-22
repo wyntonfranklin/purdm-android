@@ -75,7 +75,7 @@ public class CreateTransactionActivity extends AppCompatActivity {
     }
 
     public void saveForm(){
-        form.saveTransaction(); //local db
+        form.saveTransaction();
         Ion.with( CreateTransactionActivity.this)
                 .load(api.createTransactionUrl())
                 .setLogging("MyLogs", Log.DEBUG)
@@ -91,13 +91,11 @@ public class CreateTransactionActivity extends AppCompatActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         if( e != null ){
-                            Snackbar.make(form.getElementDescription(), "An error occurred.", Snackbar.LENGTH_LONG)
-                                    .setAction("Retry", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            saveTransaction();
-                                        }
-                                    }).show();
+                            form.saveTransaction(); //local db
+                            Intent intent = new Intent(CreateTransactionActivity.this, PendingTransactionsActivity.class);
+                            startActivity(intent);
+                            finish();
+
                         }else{
                              Log.d("results", result.toString());
                             JsonResponse jr = new JsonResponse(result);

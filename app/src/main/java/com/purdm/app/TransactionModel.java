@@ -15,6 +15,7 @@ public class TransactionModel {
     public String accountName;
     public String memo;
     public String frequency;
+    public String id="";
 
 
     public TransactionModel(){
@@ -45,13 +46,18 @@ public class TransactionModel {
             this.transType = cursor.getString(5);
             this.memo = cursor.getString(6);
             this.accountName = cursor.getString(7);
+            if(!cursor.isNull(8)){
+                this.id = cursor.getString(8);
+            }
         }catch (Exception e ){
 
         }
 
     }
 
-
+    public String getId() {
+        return id;
+    }
 
     public String getTransDate() {
         return transDate;

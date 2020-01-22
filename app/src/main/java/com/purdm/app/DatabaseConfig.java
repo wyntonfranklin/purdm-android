@@ -51,6 +51,13 @@ public class DatabaseConfig extends SQLiteAssetHelper {
         db.close();
     }
 
+    public void addPendingTransactions(ContentValues val){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = val;
+        db.insert(Constants.DB_LOCAL_TRANSACTIONS, null, values);
+        db.close();
+    }
+
     public void addAccount(String name, int Id){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -65,6 +72,16 @@ public class DatabaseConfig extends SQLiteAssetHelper {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         String [] sqlSelect = {"id","trans_date","amount", "description","category","type","memo","account"};
         String sqlTables = Constants.DB_RECENT_TRANSACTIONS;
+        qb.setTables(sqlTables);
+        Cursor cursor = qb.query(db, sqlSelect,null,null, null, null,null, null);
+        return cursor;
+    }
+
+    public Cursor getPendingTransactions(){
+        SQLiteDatabase db = getReadableDatabase();
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+        String [] sqlSelect = {"id","trans_date","amount", "description","category","type","memo","account","id"};
+        String sqlTables = Constants.DB_LOCAL_TRANSACTIONS;
         qb.setTables(sqlTables);
         Cursor cursor = qb.query(db, sqlSelect,null,null, null, null,null, null);
         return cursor;
@@ -137,6 +154,14 @@ public class DatabaseConfig extends SQLiteAssetHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String sqlTables = Constants.DB_ACCOUNTS;
         db.delete(sqlTables, null, null);
+        db.close();
+    }
+
+
+    public void deletePendingTransaction(String Id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sqlTables = Constants.DB_LOCAL_TRANSACTIONS;
+        db.delete(sqlTables, "id =" + Id, null);
         db.close();
     }
 

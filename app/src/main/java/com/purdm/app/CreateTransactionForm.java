@@ -2,6 +2,7 @@ package com.purdm.app;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -221,7 +222,15 @@ public class CreateTransactionForm {
     }
 
     public void saveTransaction(){
-
+        ContentValues values = new ContentValues();
+        values.put("trans_date", this.getDate());
+        values.put("amount", this.getAmount());
+        values.put("description", this.getDescription());
+        values.put("category", this.getCategory());
+        values.put("type",this.getType());
+        values.put("account", this.getAccountId());
+        values.put("memo", this.getMemo());
+        db.addPendingTransactions(values);
     }
 
 }
