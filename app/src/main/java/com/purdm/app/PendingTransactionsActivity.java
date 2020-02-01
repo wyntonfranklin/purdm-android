@@ -145,11 +145,11 @@ public class PendingTransactionsActivity extends AppCompatActivity {
         Ion.with(this)
                 .load(api.createTransactionUrl())
                 .setLogging("MyLogs", Log.DEBUG)
-                .setBodyParameter("transType", model.getTransType())
+                .setBodyParameter("transType", model.getOriginalTransType())
                 .setBodyParameter("account", model.getAccountName())
                 .setBodyParameter("category", model.getCategory())
                 .setBodyParameter("transDate",model.getTransDate())
-                .setBodyParameter("description", model.getTransDate())
+                .setBodyParameter("description", model.getDescription())
                 .setBodyParameter("amount", model.getAmount())
                 .setBodyParameter("frequency", model.getFrequency())
                 .asJsonObject()
@@ -164,6 +164,8 @@ public class PendingTransactionsActivity extends AppCompatActivity {
                             Log.d("results", jr.getStatus());
                             if(jr.isGood()){
                                 db.deletePendingTransaction(model.getId());
+                                transactions.remove(model);
+                                adapter.refreshAdapter(transactions);
                             }else{
 
                             }
@@ -191,10 +193,11 @@ public class PendingTransactionsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            swipeContainer.setRefreshing(false);
             PendingTransactionsActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    swipeContainer.setRefreshing(false);
+
                 }
             });
         }

@@ -75,7 +75,6 @@ public class CreateTransactionActivity extends AppCompatActivity {
     }
 
     public void saveForm(){
-        form.saveTransaction();
         Ion.with( CreateTransactionActivity.this)
                 .load(api.createTransactionUrl())
                 .setLogging("MyLogs", Log.DEBUG)

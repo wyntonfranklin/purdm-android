@@ -137,9 +137,13 @@ public class TransactionModel {
         values.put("amount", this.getAmount());
         values.put("description", this.getDescription());
         values.put("category", this.getCategory());
-        values.put("type",this.getTransType());
+        values.put("type",this.getOriginalTransType());
         values.put("memo", this.getMemo());
         values.put("account", this.getAccountName());
         return values;
+    }
+
+    public String getOriginalTransType(){
+        return this.transType;
     }
 }

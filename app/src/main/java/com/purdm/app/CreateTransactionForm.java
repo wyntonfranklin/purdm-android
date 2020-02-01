@@ -39,6 +39,7 @@ public class CreateTransactionForm {
     public DatabaseConfig db;
     public List<String> accountsList;
     public List<String> accountsId;
+    public String[] frequencyValue =  {"","year","month","week","day"};
 
 
     public CreateTransactionForm(Activity m){
@@ -92,7 +93,7 @@ public class CreateTransactionForm {
     }
 
     public String getFrequency(){
-        return this.frequency.getSelectedItem().toString();
+        return this.frequencyValue[this.frequency.getSelectedItemPosition()];
     }
 
     public String getDate(){
