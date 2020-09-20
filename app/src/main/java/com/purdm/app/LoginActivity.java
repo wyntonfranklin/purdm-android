@@ -141,9 +141,7 @@ public class LoginActivity extends AppCompatActivity {
         db.clearAllRecentTransactions(); // referesh all data
         JsonArray cats = resp.getJsonArrayFromData("categories");
         JsonArray accounts = resp.getJsonArrayFromData("accounts");
-        Log.d("categories", cats.toString());
-        Log.d("accounts", accounts.toString());
-        if(cats.size()-1 <=0){
+        if(cats.size() <=0){
             throw new Exception("Error while adding categories");
         }else{
             for(int i=0; i<= cats.size()-1; i++){
@@ -151,13 +149,12 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d("add category", cats.get(i).getAsString());
             }
         }
-        if(accounts.size()-1 <=0){
+        if(accounts.size() <=0){
             throw new Exception("No accounts created for this profile.");
         }else{
             for(int i=0; i<= accounts.size()-1; i++){
                 JsonObject obj = accounts.get(i).getAsJsonObject();
                 db.addAccount(obj.get("name").getAsString(), obj.get("id").getAsInt());
-                Log.d("add account", obj.toString());
             }
         }
 

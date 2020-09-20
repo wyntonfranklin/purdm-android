@@ -165,7 +165,7 @@ public class InsightsActivity extends AppCompatActivity {
                     public void onCompleted(Exception e, JsonObject result) {
                         // do stuff with the result or error
                         if( e != null ){
-                            Log.d("error", e.getMessage());
+                            //Log.d("error", e.getMessage());
                             Snackbar.make(rv, "An error occurred", Snackbar.LENGTH_LONG)
                                     .setAction("Retry", new View.OnClickListener() {
                                         @Override
@@ -174,7 +174,6 @@ public class InsightsActivity extends AppCompatActivity {
                                         }
                                     }).show();
                         }else{
-                            Log.d("results", result.toString());
                             JsonResponse res = new JsonResponse(result);
                             if(res.isGood()){
                               loadInsights(res);

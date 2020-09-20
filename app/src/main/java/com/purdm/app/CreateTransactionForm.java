@@ -134,7 +134,6 @@ public class CreateTransactionForm {
             this.transDate.setError(null);
             return true;
         }catch (Exception e){
-            Log.d("Date error", e.getMessage());
             return false;
         }
     }

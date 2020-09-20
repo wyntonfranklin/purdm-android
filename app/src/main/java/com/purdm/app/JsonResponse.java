@@ -51,7 +51,7 @@ public class JsonResponse {
                 }
             }
         }catch (Exception e){
-            Log.d("json repsonse error", e.getMessage());
+           // Log.d("json repsonse error", e.getMessage());
         }
     }
 

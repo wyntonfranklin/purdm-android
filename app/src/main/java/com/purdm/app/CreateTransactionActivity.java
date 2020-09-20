@@ -58,7 +58,6 @@ public class CreateTransactionActivity extends AppCompatActivity {
             finish();
         }
         if(id == R.id.action_save){
-            Log.d("form elements", form.toString());
             saveTransaction();
         }
         return super.onOptionsItemSelected(item);
@@ -96,9 +95,7 @@ public class CreateTransactionActivity extends AppCompatActivity {
                             finish();
 
                         }else{
-                             Log.d("results", result.toString());
                             JsonResponse jr = new JsonResponse(result);
-                            Log.d("results", jr.getStatus());
                             if(jr.isGood()){
                                 finish();
                             }else{

@@ -20,7 +20,7 @@ public class DashBoardModel {
             this.networth = in.get("worth").getAsString();
             this.savings = in.get("savings").getAsString();
         }catch (Exception e){
-            Log.d("error", e.getMessage());
+           // Log.d("error", e.getMessage());
         }
     }
 

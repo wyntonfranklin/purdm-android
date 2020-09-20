@@ -159,9 +159,7 @@ public class PendingTransactionsActivity extends AppCompatActivity {
                         if( e != null ){
 
                         }else{
-                            Log.d("results", result.toString());
                             JsonResponse jr = new JsonResponse(result);
-                            Log.d("results", jr.getStatus());
                             if(jr.isGood()){
                                 db.deletePendingTransaction(model.getId());
                                 transactions.remove(model);
