@@ -8,6 +8,8 @@ You can learn more about PURDM [here](https://github.com/wyntonfranklin/wfexpens
 PURDM for android allows you to track your expenses on the go.
 The app is available on the playstore [here](https://play.google.com/store/apps/details?id=com.purdm.app&hl=en).
 
+![screenshot](all_sc.png)
+
 # Development
 
 This app is built using java. You can clone the repo and get started at your leisure.
